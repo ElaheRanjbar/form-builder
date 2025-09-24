@@ -1,1 +1,19 @@
-<p>base-string-component works!</p>
+<div class="field">
+  <label *ngIf="label" [attr.for]="name">{{ label }}</label>
+  <input
+    type="text"
+    class="input"
+    [formControl]="control"
+    [placeholder]="placeholder || ''"
+    [attr.name]="name"
+    [attr.id]="name"
+  />
+
+  <small class="error" *ngIf="control?.touched && control?.invalid">
+    <span *ngIf="control?.errors?.['required']">poresh kon</span>
+    <span *ngIf="control?.errors?.['minlength']">bozorg tar</span>
+    <span *ngIf="control?.errors?.['maxlength']">koochik tar</span>
+    <span *ngIf="control?.errors?.['pattern']">eshtebah formatesh</span>
+  </small>
+  <small class="hint" *ngIf="!control?.touched && placeholder">{{ placeholder }}</small>
+</div>

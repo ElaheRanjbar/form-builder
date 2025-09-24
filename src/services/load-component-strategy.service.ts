@@ -1,6 +1,6 @@
 import { ComponentRef, Injectable, Injector, ViewContainerRef } from "@angular/core";
 
-  @Injectable()
+  @Injectable({ providedIn: 'root' })
   export class LoadComponentStrategyService {
     private static components = new Map<string, () => Promise<any>>();
     static setStrategy(key: string, importer: () => Promise<any>) {

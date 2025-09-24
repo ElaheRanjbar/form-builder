@@ -1,29 +1,33 @@
-import { Component, Injector, NO_ERRORS_SCHEMA, OnInit, ViewContainerRef } from '@angular/core';
+import { Component, NO_ERRORS_SCHEMA } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { LoadComponentStrategyService } from '../services/load-component-strategy.service';
-import { CommonModule, NgTemplateOutlet } from '@angular/common';
+import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule } from '@angular/forms';
+import { LoadComponentModel } from '../services/load-compnent.model';
+import { FormBuilderComponent } from './form-builder/form-builder.component';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
-  providers:[LoadComponentStrategyService,NgTemplateOutlet,CommonModule],
-  schemas:[NO_ERRORS_SCHEMA],
+  standalone: true,
+  imports: [RouterOutlet, CommonModule, ReactiveFormsModule, FormBuilderComponent],
+  providers: [],
+  schemas: [NO_ERRORS_SCHEMA],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
-export class AppComponent implements OnInit{
+export class AppComponent {
   title = 'formBuilder';
-  componentS:any;
-  componentN:any;
-  constructor(private test: LoadComponentStrategyService, private vcr : ViewContainerRef, private injector: Injector){}
-  ngOnInit(){
-    this.test.executeStrategy(this.vcr,'string',this.injector).then((data)=>{
-      console.log(data)
-      this.componentS = data
-    })
-    this.test.executeStrategy(this.vcr,'number',this.injector).then((data)=>{
-      console.log(data)
-      this.componentN = data
-    })
-  }
+
+  schema: LoadComponentModel.Schema = {
+    fields: [
+      { key: 'firstName', type: 'string', label: 'First Name', placeholder: 'John', validators: { required: true, minLength: 2 } },
+      { key: 'age', type: 'number', label: 'Age', value: 18, validators: { min: 0, max: 120 } },
+      { key: 'age', type: 'number', label: 'Age', value: 18, validators: { min: 0, max: 120 } },
+      { key: 'age', type: 'number', label: 'Age', value: 18, validators: { min: 0, max: 120 } },
+      { key: 'age', type: 'number', label: 'Age', value: 18, validators: { min: 0, max: 120 } },
+      { key: 'age', type: 'number', label: 'Age', value: 18, validators: { min: 0, max: 120 } },
+      { key: 'age', type: 'number', label: 'Age', value: 18, validators: { min: 0, max: 120 } },
+    ],
+  };
+
+
 }

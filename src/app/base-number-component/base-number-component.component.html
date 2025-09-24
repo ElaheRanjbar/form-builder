@@ -1,1 +1,18 @@
-<p>base-number-component works!</p>
+<div class="field">
+  <label *ngIf="label" [attr.for]="name">{{ label }}</label>
+  <input
+    type="number"
+    class="input"
+    [formControl]="control"
+    [placeholder]="placeholder || ''"
+    [attr.name]="name"
+    [attr.id]="name"
+  />
+
+  <small class="error" *ngIf="control?.touched && control?.invalid">
+    <span *ngIf="control?.errors?.['required']">poresh kon</span>
+    <span *ngIf="control?.errors?.['min']">bozorg tar</span>
+    <span *ngIf="control?.errors?.['max']">koochik tar</span>
+  </small>
+  <small class="hint" *ngIf="!control?.touched && placeholder">{{ placeholder }}</small>
+</div>
