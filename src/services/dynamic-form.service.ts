@@ -13,9 +13,11 @@ export class DynamicFormService {
   buildForm(schema: LoadComponentModel.Schema): FormGroup {
     const controls: Record<string, FormControl> = {};
     for (const field of schema.fields) {
-      controls[field.key] = new FormControl(field.value ?? null, {
-        validators: this.buildValidators(field),
-      });
+      controls[field.key] = new FormControl(field.value ?? null,
+        {
+          validators: field.validators ?? null
+        }
+      );
     }
     return this.fb.group(controls);
   }
@@ -42,20 +44,4 @@ export class DynamicFormService {
     return { form };
   }
 
-  private buildValidators(field: LoadComponentModel.Field): ValidatorFn[] {
-    const v: ValidatorFn[] = [];
-    const opts = field.validators ?? {};
-
-    if (opts.required) v.push(Validators.required);
-
-    // Numeric validators
-    if (typeof opts.min === 'number') v.push(Validators.min(opts.min));
-    if (typeof opts.max === 'number') v.push(Validators.max(opts.max));
-
-    // String validators
-    if (typeof opts.minLength === 'number') v.push(Validators.minLength(opts.minLength));
-    if (typeof opts.maxLength === 'number') v.push(Validators.maxLength(opts.maxLength));
-    if (opts.pattern) v.push(Validators.pattern(opts.pattern));
-    return v;
-  }
 }

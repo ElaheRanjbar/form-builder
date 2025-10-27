@@ -1,30 +1,41 @@
-import { AbstractControl, ValidationErrors } from '@angular/forms';
-import { BaseValidators } from './base-validators';
-export namespace CombineValidations{
-  export class AndValidator extends BaseValidators {
-  constructor(private validators: BaseValidators[]) { super(); }
+import { AbstractControl, ValidationErrors, ValidatorFn } from "@angular/forms";
 
-  validate(control: AbstractControl): ValidationErrors | null {
-    for (const v of this.validators) {
-      const err = v.validate(control);
-      if (err) return err;
-    }
-    return null;
-  }
-}
+export const CombineValidations = {
+  /**
+   * ✅ Returns ALL validation errors combined (no short-circuit).
+   */
+  AndValidator: (validators: ValidatorFn[]): ValidatorFn => {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const allErrors: ValidationErrors = {};
 
-export class OrValidator extends BaseValidators {
-  constructor(private validators: BaseValidators[]) { super(); }
+      for (const validator of validators) {
+        const result = validator(control);
+        if (result) {
+          Object.assign(allErrors, result);
+        }
+      }
 
-  validate(control: AbstractControl): ValidationErrors | null {
-    const errors: ValidationErrors[] = [];
-    for (const v of this.validators) {
-      const err = v.validate(control);
-      if (!err) return null;
-      errors.push(err);
-    }
-    //return list of errors
-    return Object.assign({}, ...errors);
-  }
-}
-}
+      // if we collected any errors, return them; otherwise null
+      return Object.keys(allErrors).length ? allErrors : null;
+    };
+  },
+
+  /**
+   * ✅ Returns if at least one validator passes.
+   * If all fail, returns the union of all errors (for debugging clarity).
+   */
+  OrValidator: (validators: ValidatorFn[]): ValidatorFn => {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const errors: ValidationErrors[] = [];
+
+      for (const validator of validators) {
+        const result = validator(control);
+        if (!result) return null; // passes if any is valid
+        errors.push(result);
+      }
+
+      // all failed — combine their error objects
+      return Object.assign({}, ...errors);
+    };
+  },
+};

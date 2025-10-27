@@ -8,12 +8,10 @@
     [attr.name]="name"
     [attr.id]="name"
   />
-
   <small class="error" *ngIf="control?.touched && control?.invalid">
-    <span *ngIf="control?.errors?.['required']">poresh kon</span>
-    <span *ngIf="control?.errors?.['minlength']">bozorg tar</span>
-    <span *ngIf="control?.errors?.['maxlength']">koochik tar</span>
-    <span *ngIf="control?.errors?.['pattern']">eshtebah formatesh</span>
+    <ng-container *ngFor="let err of (control?.errors | keyvalue)">
+      {{ err.value }}
+    </ng-container>
   </small>
   <small class="hint" *ngIf="!control?.touched && placeholder">{{ placeholder }}</small>
 </div>
