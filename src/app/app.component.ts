@@ -13,7 +13,7 @@ import { ValidationMinLength } from './validations/validators/validation-min-len
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, CommonModule, ReactiveFormsModule, FormBuilderComponent],
+  imports: [CommonModule, ReactiveFormsModule, FormBuilderComponent],
   providers: [],
   schemas: [NO_ERRORS_SCHEMA],
   templateUrl: './app.component.html',

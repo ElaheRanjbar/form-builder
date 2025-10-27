@@ -1,3 +1,6 @@
+import { ValidationErrors, ValidatorFn } from "@angular/forms";
+import { BaseValidators } from "../app/validations/base-validators";
+
 export namespace LoadComponentModel {
   // Supported component/input types
   export type FieldType = 'string' | 'number';
@@ -9,14 +12,8 @@ export namespace LoadComponentModel {
     label?: string;
     placeholder?: string;
     value?: any;
-    validators?: {
-      required?: boolean;
-      min?: number;       
-      max?: number;       
-      minLength?: number; 
-      maxLength?: number;
-      pattern?: string;   
-    };
+    // validators?: BaseValidators;
+    validators?:ValidatorFn | ValidatorFn[]
     componentInputs?: Record<string, any>;
   }
 
